@@ -30,7 +30,7 @@ class AddToCart(Resource):
             new_cart = Cart(None, user_id, 0, 0, None, None, 'belum')
             db.session.add(new_cart)
             db.session.commit()
-            return {'status': 'kosong', 'message': 'kosong'}, 200, {'Content-Type': 'application/json'}
+            return {'status': 'tidak', 'message': 'kosong'}, 200, {'Content-Type': 'application/json'}
         else:
             new_cart = Cart(None, user_id, args['total_qty'], args['total_price'], created_at, updated_at, args['checkout'])
             db.session.add(new_cart)
@@ -54,7 +54,8 @@ class UsersRegister(Resource):
         db.session.commit()
 
         if users is not None:
-            return marshal(users, Users.response_field), 200, {'Content-Type': 'application/json'}
+            # return marshal(users, Users.response_field), 200, {'Content-Type': 'application/json'}
+            return {'status': 'Hore', 200, {'Content-Type': 'application/json'}
         return {'status': 'NOT_FOUND', 'message': 'Users not found'}, 404, {'Content-Type': 'application/json'}
 
 class UsersMe(Resource):
