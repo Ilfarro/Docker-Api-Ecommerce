@@ -33,7 +33,6 @@ class ItemsAuthenticated(Resource):
                             qry = Items.query.filter(Items.lokasi.like("%"+args['search']+"%"))
                             if qry.first() is None:
                                 return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
-            
             rows = []
             for row in qry.limit(args['rp']).offset(offset).all():
                 rows.append(marshal(row, Items.response_field))
