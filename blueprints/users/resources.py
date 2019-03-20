@@ -23,7 +23,7 @@ class AddToCart(Resource):
         args = parser.parse_args()
 
         created_at = datetime.now()
-        deleted_at = datetime.now()
+        updated_at = datetime.now()
 
         qry = Cart.query.filter_by(user_id = user_id).first()
         if qry is None:
@@ -32,7 +32,7 @@ class AddToCart(Resource):
             db.session.commit()
             return {'status': 'kosong', 'message': 'kosong'}, 200, {'Content-Type': 'application/json'}
         else:
-            new_cart = Cart(None, user_id, args['total_qty'], args['total_price'], created_at, deleted_at, args['checkout'])
+            new_cart = Cart(None, user_id, args['total_qty'], args['total_price'], created_at, updated_at, args['checkout'])
             db.session.add(new_cart)
             db.session.commit()
             return {'status': 'SUCCESS'}, 200, {'Content-Type': 'application/json'}
@@ -46,9 +46,10 @@ class UsersRegister(Resource):
         parser.add_argument('last_name', location='json', required=True)
         parser.add_argument('email', location='json', required=True)
         parser.add_argument('phone', location='json', required=True)
+        parser.add_argument('status', location='json', default='user')
         args = parser.parse_args()
 
-        users = Users(None, args['username'], args['password'], args['first_name'], args['last_name'], args['email'], args['phone'])
+        users = Users(None, args['username'], args['password'], args['first_name'], args['last_name'], args['email'], args['phone'], args['status'])
         db.session.add(users)
         db.session.commit()
 

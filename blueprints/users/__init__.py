@@ -10,6 +10,7 @@ class Users(db.Model):
     last_name = db.Column(db.String(200))
     email = db.Column(db.String(200), unique=True)
     phone = db.Column(db.String(200))
+    status = db.Column(db.String(200))
 
     response_field = {
         'id': fields.Integer,
@@ -18,10 +19,11 @@ class Users(db.Model):
         'first_name': fields.String,
         'last_name': fields.String,
         'email': fields.String,
-        'phone': fields.String
+        'phone': fields.String,
+        'status': fields.String
     }
 
-    def __init__(self, id, username, password, first_name, last_name, email, phone):
+    def __init__(self, id, username, password, first_name, last_name, email, phone, status):
         self.id = id
         self.username = username
         self.password = password
@@ -29,6 +31,7 @@ class Users(db.Model):
         self.last_name = last_name
         self.email = email
         self.phone = phone
+        self.status = status
 
     def __repr__(self):
         return f'<Users {self.id}>'
