@@ -2,7 +2,7 @@
 
 eval "$(ssh-agent -s)" &&
 ssh-add -k ~/.ssh/id_rsa &&
-cd /home/ubuntu/ECommerce-API
+cd /home/ubuntu/Docker-Api-Ecommerce
 git pull
 
 source ~/.profile
