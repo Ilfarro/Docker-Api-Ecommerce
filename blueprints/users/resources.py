@@ -55,7 +55,7 @@ class UsersRegister(Resource):
 
         if users is not None:
             # return marshal(users, Users.response_field), 200, {'Content-Type': 'application/json'}
-            return {'status': 'Hore'}, 200, {'Content-Type': 'application/json'}
+            return {'status': 'Alhamdulillah'}, 200, {'Content-Type': 'application/json'}
         return {'status': 'NOT_FOUND', 'message': 'Users not found'}, 404, {'Content-Type': 'application/json'}
 
 class UsersMe(Resource):
