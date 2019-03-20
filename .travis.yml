@@ -11,9 +11,9 @@ global:
 before_script:
 - openssl aes-256-cbc -K $encrypted_930d16220067_key -iv $encrypted_930d16220067_iv -in deploy_rsa.enc -out deploy_rsa -d
 - eval "$(ssh-agent -s)"
-- sudo chmod 600 deploy_rsa
+- chmod 600 deploy_rsa
 - ssh-add deploy_rsa
-- sudo docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+- docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 
 script:
 - sudo chmod +x deploy.sh
