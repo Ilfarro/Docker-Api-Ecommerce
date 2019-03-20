@@ -54,7 +54,7 @@ class UsersRegister(Resource):
         db.session.commit()
 
         if users is not None:
-            # return marshal(users, Users.response_field), 200, {'Content-Type': 'application/json'}
+            return marshal(users, Users.response_field), 200, {'Content-Type': 'application/json'}
             return {'status': 'Alhamdulillah'}, 200, {'Content-Type': 'application/json'}
         return {'status': 'NOT_FOUND', 'message': 'Users not found'}, 404, {'Content-Type': 'application/json'}
 
@@ -63,7 +63,7 @@ class UsersMe(Resource):
     def get(self):
         qry = Users.query.get(get_jwt_claims()['id'])
         if qry is not None:
-            return marshal(qry, Users.response_field), 200, {'Content-Type': 'application/json'}
+            return {'status': 'SUCCESS', 'data': marshal(qry, Users.response_field)}, 200, {'Content-Type': 'application/json'}
         return {'status': 'NOT_FOUND', 'message': 'Users not found'}, 404, {'Content-Type': 'application/json'}
 
 api.add_resource(AddToCart, '/addtocart')
