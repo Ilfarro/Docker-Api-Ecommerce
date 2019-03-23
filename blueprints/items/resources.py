@@ -15,7 +15,7 @@ class ItemsAuthenticated(Resource):
         if id is None:
             parser = reqparse.RequestParser()
             parser.add_argument('p', type=int, location='args', default=1)
-            parser.add_argument('rp', type=int, location='args', default=5)
+            parser.add_argument('rp', type=int, location='args', default=100)
             parser.add_argument('search', location='args')
             args = parser.parse_args()
 
@@ -32,17 +32,17 @@ class ItemsAuthenticated(Resource):
                         if qry.first() is None:
                             qry = Items.query.filter(Items.lokasi.like("%"+args['search']+"%"))
                             if qry.first() is None:
-                                return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+                                return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
             rows = []
             for row in qry.limit(args['rp']).offset(offset).all():
                 rows.append(marshal(row, Items.response_field))
-            return rows, 200, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'halaman': args['p'], 'data': rows}, 200, {'Content-Type': 'application/json'}
 
         else:
             qry = Items.query.get(id)
             if qry is not None:
                 return marshal(qry, Items.response_field), 200, {'Content-Type': 'application/json'}
-            return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+            return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
 
     @jwt_required
     def post(self):
@@ -61,8 +61,8 @@ class ItemsAuthenticated(Resource):
         db.session.commit()
 
         if items is not None:
-            return marshal(items, Items.response_field), 200, {'Content-Type': 'application/json'}
-        return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'data': marshal(items, Items.response_field)}, 200, {'Content-Type': 'application/json'}
+        return {'status': 'Failed', 'message': 'Failed to add item'}, 404, {'Content-Type': 'application/json'}
         
     @jwt_required
     def patch(self, id):
@@ -94,8 +94,8 @@ class ItemsAuthenticated(Resource):
         db.session.commit()
 
         if qry is not None:
-            return marshal(qry, Items.response_field), 200, {'Content-Type': 'application/json'}
-        return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'data': marshal(qry, Items.response_field)}, 200, {'Content-Type': 'application/json'}
+        return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
 
     @jwt_required
     def delete(self, id):
@@ -103,15 +103,15 @@ class ItemsAuthenticated(Resource):
         if qry is not None:
             db.session.delete(qry)
             db.session.commit()
-            return "deleted", 200
-        return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+            return {'status': "Success", 'message': 'Item deleted'}, 200, {'Content-Type': 'application/json'}
+        return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
         
 class ItemsPublic(Resource):
     def get(self, id=None):
         if id is None:
             parser = reqparse.RequestParser()
             parser.add_argument('p', type=int, location='args', default=1)
-            parser.add_argument('rp', type=int, location='args', default=5)
+            parser.add_argument('rp', type=int, location='args', default=100)
             parser.add_argument('search', location='args')
             args = parser.parse_args()
 
@@ -128,18 +128,18 @@ class ItemsPublic(Resource):
                         if qry.first() is None:
                             qry = Items.query.filter(Items.lokasi.like("%"+args['search']+"%"))
                             if qry.first() is None:
-                                return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+                                return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
 
             rows = []
             for row in qry.limit(args['rp']).offset(offset).all():
                 rows.append(marshal(row, Items.response_field))
-            return rows, 200, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'halaman': args['p'], 'data': rows}, 200, {'Content-Type': 'application/json'}
 
         else:
             qry = Items.query.get(id)
             if qry is not None:
                 return marshal(qry, Items.response_field), 200, {'Content-Type': 'application/json'}
-            return {'status': 'NOT_FOUND', 'message': 'Items not found'}, 404, {'Content-Type': 'application/json'}
+            return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
 
 api.add_resource(ItemsAuthenticated, '/users/items', '/users/items/<int:id>')
 api.add_resource(ItemsPublic, '/public/items', '/public/items/<int:id>')

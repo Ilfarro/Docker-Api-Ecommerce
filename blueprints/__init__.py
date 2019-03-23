@@ -10,8 +10,8 @@ from datetime import timedelta
 app = Flask(__name__)
 
 # CONNECTION STRING
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ilham:alphatech123@172.31.38.74:3306/e_commerce'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:alphatech123@localhost:3306/e_commerce'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ilham:alphatech123@172.31.38.74:3306/e_commerce'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:alphatech123@localhost:3306/e_commerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # FOR JWT MANAGER
@@ -49,9 +49,14 @@ def after_request(response):
 from blueprints.auth import bp_auth
 from blueprints.users.resources import bp_users
 from blueprints.items.resources import bp_items
-from blueprints.cart import bp_cart
+from blueprints.cart.resources import bp_cart
+from blueprints.package.resources import bp_package
+from blueprints.transaction.resources import bp_transaction
 
 #JIKA INGIN MERUBAH PREFIX TAMBAHKAN (url_prefix='....')
 app.register_blueprint(bp_auth, url_prefix='/api/users/login')
 app.register_blueprint(bp_users, url_prefix='/api/users')
 app.register_blueprint(bp_items, url_prefix='/api')
+app.register_blueprint(bp_cart, url_prefix='/api')
+app.register_blueprint(bp_package, url_prefix='/api')
+app.register_blueprint(bp_transaction, url_prefix='/api')
