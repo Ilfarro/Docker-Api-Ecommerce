@@ -127,6 +127,7 @@ class ItemsPublic(Resource):
             parser.add_argument('p', type=int, location='args', default=1)
             parser.add_argument('rp', type=int, location='args', default=100)
             parser.add_argument('search', location='args')
+            parser.add_argument('status_item', location='args')
             parser.add_argument('kategori', location='args')
             args = parser.parse_args()
 
@@ -144,6 +145,9 @@ class ItemsPublic(Resource):
                             qry = Items.query.filter(Items.lokasi.like("%"+args['search']+"%"))
                             if qry.first() is None:
                                 return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
+
+            if args['status_item'] is not None:
+                qry = qry.filter(Items.status_item.like("%"+args['status_item']+"%"))
 
             if args['kategori'] is not None:
                 qry = qry.filter(Items.kategori.like("%"+args['kategori']+"%"))
