@@ -10,8 +10,8 @@ from datetime import timedelta
 app = Flask(__name__)
 
 # CONNECTION STRING
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ilham:alphatech123@172.31.38.74:3306/e_commerce'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:alphatech123@localhost:3306/e_commerce'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ilham:alphatech123@172.31.38.74:3306/e_commerce'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:alphatech123@localhost:3306/e_commerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # FOR JWT MANAGER
