@@ -10,6 +10,7 @@ class Items(db.Model):
     harga = db.Column(db.Integer)
     lokasi = db.Column(db.String(200))
     url_foto = db.Column(db.String(200))
+    status_item = db.Column(db.String(200))
     post_by = db.Column(db.String(200))
 
     response_field = {
@@ -20,10 +21,11 @@ class Items(db.Model):
         'harga': fields.Integer,
         'lokasi': fields.String,
         'url_foto': fields.String,
+        'status_item': fields.String,
         'post_by': fields.String
     }
 
-    def __init__(self, id, kategori, nama, deskripsi, harga, lokasi, url_foto, post_by):
+    def __init__(self, id, kategori, nama, deskripsi, harga, lokasi, url_foto, status_item, post_by):
         self.id = id
         self.kategori = kategori
         self.nama = nama
@@ -31,6 +33,7 @@ class Items(db.Model):
         self.harga = harga
         self.lokasi = lokasi
         self.url_foto = url_foto
+        self.status_item = status_item
         self.post_by = post_by
 
     def __repr__(self):

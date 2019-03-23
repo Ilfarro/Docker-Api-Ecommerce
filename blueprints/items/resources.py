@@ -17,6 +17,7 @@ class ItemsAuthenticated(Resource):
             parser.add_argument('p', type=int, location='args', default=1)
             parser.add_argument('rp', type=int, location='args', default=100)
             parser.add_argument('search', location='args')
+            parser.add_argument('status_item', location='args')
             args = parser.parse_args()
 
             offset = (args['p'] * args['rp']) - args['rp']  
@@ -33,6 +34,10 @@ class ItemsAuthenticated(Resource):
                             qry = Items.query.filter(Items.lokasi.like("%"+args['search']+"%"))
                             if qry.first() is None:
                                 return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
+
+            if args['status_item'] is not None:
+                qry = qry.filter(Items.status_item.like("%"+args['status_item']+"%"))
+            
             rows = []
             for row in qry.limit(args['rp']).offset(offset).all():
                 rows.append(marshal(row, Items.response_field))
@@ -56,7 +61,9 @@ class ItemsAuthenticated(Resource):
         parser.add_argument('url_foto', location='json', required=True)
         args = parser.parse_args()
 
-        items = Items(None, args['kategori'], args['nama'], args['deskripsi'], args['harga'], args['lokasi'], args['url_foto'], users_id)
+        status_item = 'regular'
+
+        items = Items(None, args['kategori'], args['nama'], args['deskripsi'], args['harga'], args['lokasi'], args['url_foto'], status_item, users_id)
         db.session.add(items)
         db.session.commit()
 
@@ -76,6 +83,7 @@ class ItemsAuthenticated(Resource):
         parser.add_argument('harga', location='json')
         parser.add_argument('lokasi', location='json')
         parser.add_argument('url_foto', location='json')
+        parser.add_argument('status_item', location='json')
         args = parser.parse_args()
 
         if args['kategori'] is not None:
@@ -90,6 +98,8 @@ class ItemsAuthenticated(Resource):
             qry.lokasi = args['lokasi']
         if args['url_foto'] is not None:
             qry.url_foto = args['url_foto']
+        if args['status_item'] is not None:
+            qry.status_item = args['status_item']
 
         db.session.commit()
 
