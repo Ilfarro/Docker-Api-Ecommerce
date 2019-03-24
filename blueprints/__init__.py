@@ -6,12 +6,14 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # CONNECTION STRING
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ilham:alphatech123@172.31.38.74:3306/e_commerce'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:alphatech123@localhost:3306/e_commerce'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ilham:alphatech123@172.31.38.74:3306/e_commerce'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:alphatech123@localhost:3306/e_commerce'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # FOR JWT MANAGER

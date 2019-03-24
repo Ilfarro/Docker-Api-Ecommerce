@@ -71,14 +71,29 @@ class ItemsAuthenticated(Resource):
         db.session.add(items)
         db.session.commit()
 
+        items_qry = Items.query.filter_by(post_by = users_id)
+        user_qry = Users.query.get(get_jwt_claims()['id'])
+
+        jumlah_iklan = 0
+        jumlah_iklan_premium = 0
+        for element in items_qry.all():
+            if element.status_item == "regular":
+                jumlah_iklan += 1
+            elif element.status_item == "premium":
+                jumlah_iklan_premium + 1
+        
+        user_qry.jumlah_iklan = jumlah_iklan
+        user_qry.jumlah_iklan_premium = jumlah_iklan_premium
+        db.session.commit()
+
         if items is not None:
-            return {'status': 'Success', 'data': marshal(items, Items.response_field)}, 200, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'test': user_qry.jumlah_iklan_premium, 'data': marshal(items, Items.response_field)}, 200, {'Content-Type': 'application/json'}
         return {'status': 'Failed', 'message': 'Failed to add item'}, 404, {'Content-Type': 'application/json'}
         
     @jwt_required
     def patch(self, id):
+        users_id = get_jwt_claims()["id"]
         qry = Items.query.get(id)
-        # temp = marshal(qry, Items.response_field)
         
         parser = reqparse.RequestParser()
         parser.add_argument('kategori', location='json')
@@ -104,7 +119,21 @@ class ItemsAuthenticated(Resource):
             qry.url_foto = args['url_foto']
         if args['status_item'] is not None:
             qry.status_item = args['status_item']
+        db.session.commit()
 
+        items_qry = Items.query.filter_by(post_by = users_id)
+        user_qry = Users.query.get(get_jwt_claims()['id'])
+
+        jumlah_iklan = 0
+        jumlah_iklan_premium = 0
+        for element in items_qry.all():
+            if element.status_item == "regular":
+                jumlah_iklan += 1
+            elif element.status_item == "premium":
+                jumlah_iklan_premium + 1
+        
+        user_qry.jumlah_iklan = jumlah_iklan
+        user_qry.jumlah_iklan_premium = jumlah_iklan_premium
         db.session.commit()
 
         if qry is not None:
@@ -113,10 +142,27 @@ class ItemsAuthenticated(Resource):
 
     @jwt_required
     def delete(self, id):
+        users_id = get_jwt_claims()["id"]
         qry = Items.query.get(id)
         if qry is not None:
             db.session.delete(qry)
             db.session.commit()
+
+            items_qry = Items.query.filter_by(post_by = users_id)
+            user_qry = Users.query.get(get_jwt_claims()['id'])
+
+            jumlah_iklan = 0
+            jumlah_iklan_premium = 0
+            for element in items_qry.all():
+                if element.status_item == "regular":
+                    jumlah_iklan += 1
+                elif element.status_item == "premium":
+                    jumlah_iklan_premium + 1
+            
+            user_qry.jumlah_iklan = jumlah_iklan
+            user_qry.jumlah_iklan_premium = jumlah_iklan_premium
+            db.session.commit()
+
             return {'status': "Success", 'message': 'Item deleted'}, 200, {'Content-Type': 'application/json'}
         return {'status': 'Not Found', 'message': 'Item not found'}, 404, {'Content-Type': 'application/json'}
         

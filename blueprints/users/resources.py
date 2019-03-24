@@ -30,16 +30,16 @@ class UsersRegister(Resource):
         db.session.commit()
 
         if users is not None:
-            return {'status': 'Success', 'message': 'User added', 'data': marshal(users, Users.response_field)}, 200, {'Content-Type': 'application/json'}
-        return {'status': 'Failed', 'message': 'Please fill the field'}, 404, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'message': 'User added', 'data': marshal(users, Users.response_field)}, 200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
+        return {'status': 'Failed', 'message': 'Please fill the field'}, 404, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
 
 class UsersMe(Resource):
     @jwt_required
     def get(self):
         qry = Users.query.get(get_jwt_claims()['id'])
         if qry is not None:
-            return {'status': 'Success', 'data': marshal(qry, Users.response_field)}, 200, {'Content-Type': 'application/json'}
-        return {'status': 'Not Found', 'message': 'User not found'}, 404, {'Content-Type': 'application/json'}
+            return {'status': 'Success', 'data': marshal(qry, Users.response_field)}, 200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
+        return {'status': 'Not Found', 'message': 'User not found'}, 404, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
 
 api.add_resource(UsersRegister, '/register')
 api.add_resource(UsersMe, '/me')
