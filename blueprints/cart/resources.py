@@ -59,10 +59,10 @@ class CartResource(Resource):
         user_id = get_jwt_claims()['id']
         transaction_id = 0
         nama_package = marshal(qry, Package.response_field)['nama']
-        quantity = 1
-        harga = marshal(qry, Package.response_field)['harga']
         created_at = datetime.now()
         updated_at = datetime.now()
+        quantity = 1
+        harga = marshal(qry, Package.response_field)['harga']
 
         cart = Cart(None, user_id, args['package_id'], transaction_id, nama_package, quantity, harga, created_at, updated_at)
         db.session.add(cart)

@@ -67,10 +67,21 @@ class TransactionResource(Resource):
         payment_status = 'paid'
         total_quantity = 0
         total_harga = 0
+
+        user_qry = Users.query.get(get_jwt_claims()['id'])
+        
         for element in cart_qry.all():
             temp = marshal(element, Cart.response_field)
             total_quantity += temp['quantity']
             total_harga += temp['harga']
+            if element.package_id == 1:
+                user_qry.jumlah_iklan += 1
+            elif element.package_id == 2:
+                user_qry.jumlah_iklan += 3
+                user_qry.jumlah_iklan_premium += 1
+            elif element.package_id == 3:
+                user_qry.jumlah_iklan += 8
+                user_qry.jumlah_iklan_premium += 3
 
         transaction_qry = Transaction(None, user_id, total_quantity, total_harga, args['payment_method'], payment_status, created_at, updated_at)
         db.session.add(transaction_qry)
